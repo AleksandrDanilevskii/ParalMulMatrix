@@ -162,38 +162,6 @@ public class SMatrix implements Matrix {
         return new SMatrix(matrixTr, size);
     }
 
-    /*public SMatrix mulSparseDence(DMatrix other) {
-        SMatrix res = new SMatrix(size);
-        other = other.MatrixSTrans();
-        int[][] a = other.matrix;
-        Iterator<Map.Entry<Integer, row>> iter1 = this.map.entrySet().iterator();// итератор спарс матрицы
-        while (iter1.hasNext()) {
-            Map.Entry entry1 = iter1.next();
-            Integer key1 = (Integer) entry1.getKey();
-            HashMap<Integer, Integer> value1 = (HashMap<Integer, Integer>) entry1.getValue();// получаем определенную строку
-            row resRow = new row();
-            for (int i = 0; i < size; i++) {
-                int resValue = 0;
-                Iterator iterElement = value1.entrySet().iterator(); // получаем элементы определенной строки
-                while (iterElement.hasNext()) {
-                    Map.Entry entryElement = (Map.Entry) iterElement.next();
-                    Integer keyElement = (Integer) entryElement.getKey();// столбец элемента
-                    Integer valueElement = (Integer) entryElement.getValue();// сам элемент
-                    if (other.matrix[i][keyElement] != 0.0) {
-                        resValue = resValue + valueElement * a[i][keyElement];
-                    }
-                }
-                if (resValue != 0.0) {
-                    resRow.put(i, resValue);
-                }
-            }
-            if (resRow != null) {
-                res.map.put(key1, resRow);
-            }
-        }
-        return res;
-    }*/
-
 
     public void mapOut(BufferedWriter sp) {
         try {
