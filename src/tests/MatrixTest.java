@@ -11,7 +11,7 @@ public class MatrixTest {
     DMatrix ADense2;
     SMatrix result;
     DMatrix result1;
-    
+
     public MatrixTest() {
         try {
             s = new BufferedReader(new FileReader("src/tests/test1.txt"));

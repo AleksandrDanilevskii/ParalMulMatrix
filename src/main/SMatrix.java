@@ -19,27 +19,25 @@ public class SMatrix implements Matrix {
 
     public SMatrix(BufferedReader s) {
         try {
-            String temp = s.readLine();
-            String[] arr = temp.split(" ");
-            int k = arr.length;
-            int number;
-            size = k;
+            String temp = s.readLine(); //читаем строку
+            String[] arr = temp.split(" "); //разбиваем на числа
+            int k = arr.length; //длина строки
+            int number; //элемент
+            size = k; //размер матрицы
             map = new ConcurrentHashMap<Integer, row>();
             row tmap = new row();
 
             for (int j = 0; j < size; j++) {
-                number = Integer.parseInt(arr[j]);
+                number = Integer.parseInt(arr[j]); //переводим в int
                 if (number != 0) {
-                    tmap.put(j, number);
+                    tmap.put(j, number);//если не нуль, добавляем в tmap
                 }
             }
             if (tmap != null) {
-                map.put(0, tmap);
+                map.put(0, tmap);//добавляем строку в map
             }
 
-
             for (int i = 1; i < size; i++) {
-
                 temp = s.readLine();
                 arr = temp.split(" ");
                 tmap = new row();
@@ -65,7 +63,6 @@ public class SMatrix implements Matrix {
             e.printStackTrace();
             return null;
         }
-        //else return this.mulSparseDence((DMatrix) other);
         return other;
     }
 
@@ -73,7 +70,7 @@ public class SMatrix implements Matrix {
 
         other = other.MatrixSTrans();
         SMatrix result = new SMatrix(size);
-        Iterator<ConcurrentHashMap.Entry<Integer, row>> iter1 = this.map.entrySet().iterator();
+        Iterator<ConcurrentHashMap.Entry<Integer, row>> iter1 = this.map.entrySet().iterator();//получаем ключи и значения map. множество строк
         MulSS t = new MulSS(this.map, other.map, result.map, iter1);
 
         Thread t1 = new Thread(t);
@@ -106,29 +103,29 @@ public class SMatrix implements Matrix {
         }
 
         public void run() {
-            while (iter1.hasNext()) {
-                Map.Entry entry1 = iter1.next();
-                Integer key1 = (Integer) entry1.getKey();
-                HashMap<Integer, Integer> value1 = (HashMap<Integer, Integer>) entry1.getValue();// строки первой матрицы
-                Iterator<HashMap.Entry<Integer, row>> iter2 = B.entrySet().iterator();
+            //разбиваем iter1 на строки
+            while (iter1.hasNext()) { //пока не конец
+                Map.Entry entry1 = iter1.next(); //берем пару
+                Integer key1 = (Integer) entry1.getKey(); //получаем номер строки
+                HashMap<Integer, Integer> value1 = (HashMap<Integer, Integer>) entry1.getValue();// строки
                 row resRow = new row();
-                while (iter2.hasNext()) {
-                    HashMap.Entry entry2 = iter2.next();
+                //разбиваем iter2
+                for (Map.Entry entry2 : B.entrySet()) {
                     Integer key2 = (Integer) entry2.getKey();
-                    HashMap<Integer, Integer> value2 = (HashMap<Integer, Integer>) entry2.getValue();// строки второй матрицы
-                    Iterator iterElement = value1.entrySet().iterator();
+                    HashMap<Integer, Integer> value2 = (HashMap<Integer, Integer>) entry2.getValue();
+                    Iterator iterElement = value1.entrySet().iterator(); //множество ключей и зачений
                     int resValue = 0;
                     while (iterElement.hasNext()) {
-                        HashMap.Entry entryElement = (HashMap.Entry) iterElement.next();
-                        Integer keyElement1 = (Integer) entryElement.getKey();
-                        Integer valueElement1 = (Integer) entryElement.getValue();
-                        if (value2.get(keyElement1) != null) {
-                            int a = value2.get(keyElement1);
-                            resValue = resValue + valueElement1 * a;
+                        HashMap.Entry entryElement = (HashMap.Entry) iterElement.next(); // берем элемент
+                        Integer keyElement = (Integer) entryElement.getKey(); //получаем ключ
+                        Integer valueElement = (Integer) entryElement.getValue();  //получаем значение. 1
+                        if (value2.get(keyElement) != null) {
+                            int a = value2.get(keyElement); //умнлжаем
+                            resValue += valueElement * a;
                         }
                     }
                     if (resValue != 0) {
-                        resRow.put(key2, resValue);
+                        resRow.put(key2, resValue); //если не 0, добавляем
                     }
                 }
                 if (resRow != null) {
@@ -147,11 +144,10 @@ public class SMatrix implements Matrix {
             HashMap<Integer, row> value = (HashMap<Integer, row>) entry.getValue(); // получаем элементы определенной строки
             Iterator iterRow = value.entrySet().iterator(); // берем по элементно
             while (iterRow.hasNext()) {
-                row RowTr = new row();
                 Map.Entry entryRow = (Map.Entry) iterRow.next();
                 Integer keyElements = (Integer) entryRow.getKey();
                 Integer valueElements = (Integer) entryRow.getValue();
-                RowTr = matrixTr.get(keyElements);
+                row RowTr = matrixTr.get(keyElements);
                 if (RowTr == null) {
                     RowTr = new row();
                 }
@@ -161,38 +157,6 @@ public class SMatrix implements Matrix {
         }
         return new SMatrix(matrixTr, size);
     }
-
-    /*public SMatrix mulSparseDence(DMatrix other) {
-        SMatrix res = new SMatrix(size);
-        other = other.MatrixSTrans();
-        int[][] a = other.matrix;
-        Iterator<Map.Entry<Integer, row>> iter1 = this.map.entrySet().iterator();// итератор спарс матрицы
-        while (iter1.hasNext()) {
-            Map.Entry entry1 = iter1.next();
-            Integer key1 = (Integer) entry1.getKey();
-            HashMap<Integer, Integer> value1 = (HashMap<Integer, Integer>) entry1.getValue();// получаем определенную строку
-            row resRow = new row();
-            for (int i = 0; i < size; i++) {
-                int resValue = 0;
-                Iterator iterElement = value1.entrySet().iterator(); // получаем элементы определенной строки
-                while (iterElement.hasNext()) {
-                    Map.Entry entryElement = (Map.Entry) iterElement.next();
-                    Integer keyElement = (Integer) entryElement.getKey();// столбец элемента
-                    Integer valueElement = (Integer) entryElement.getValue();// сам элемент
-                    if (other.matrix[i][keyElement] != 0.0) {
-                        resValue = resValue + valueElement * a[i][keyElement];
-                    }
-                }
-                if (resValue != 0.0) {
-                    resRow.put(i, resValue);
-                }
-            }
-            if (resRow != null) {
-                res.map.put(key1, resRow);
-            }
-        }
-        return res;
-    }*/
 
 
     public void mapOut(BufferedWriter sp) {
