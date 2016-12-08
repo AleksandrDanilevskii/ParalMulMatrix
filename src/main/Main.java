@@ -26,16 +26,6 @@ public class Main {
             d_d.matOut(dn);
             dn.close();
 
-            /*SMatrix d_s = (SMatrix) matrixADense.mul(matrixBSparse);
-            sp = new BufferedWriter(new FileWriter(("src/main/DxS.txt")));
-            d_s.mapOut(sp);
-            sp.close();*/
-
-            /*SMatrix s_d = (SMatrix) matrixASparse.mul(matrixBDense);
-            sp = new BufferedWriter(new FileWriter(("src/main/SxD.txt")));
-            s_d.mapOut(sp);
-            sp.close();*/
-
         } catch (IOException e) {
             e.printStackTrace();
         }
