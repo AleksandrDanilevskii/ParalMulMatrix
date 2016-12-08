@@ -65,7 +65,6 @@ public class SMatrix implements Matrix {
             e.printStackTrace();
             return null;
         }
-        //else return this.mulSparseDence((DMatrix) other);
         return other;
     }
 
