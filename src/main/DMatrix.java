@@ -2,9 +2,6 @@ import java.lang.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-/*import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;*/
 
 public class DMatrix implements Matrix {
     public int size;
@@ -55,7 +52,6 @@ public class DMatrix implements Matrix {
             e.printStackTrace();
             return null;
         }
-        //else return this.mulDenceSparse((SMatrix) other);
         return other;
     }
 
@@ -107,35 +103,6 @@ public class DMatrix implements Matrix {
             }
         }
     }
-
-    /*public SMatrix mulDenceSparse(SMatrix other) {
-        other = other.MatrixSTrans();
-        SMatrix res = new SMatrix(size);
-        for (int i = 0; i < size; i++) {
-            row resRow = new row();
-            Iterator<Map.Entry<Integer, row>> iter1 = other.map.entrySet().iterator();// итератор строк
-            while (iter1.hasNext()) {
-                Map.Entry entry1 = iter1.next();
-                Integer key1 = (Integer) entry1.getKey();// ключ строки
-                HashMap<Integer, Integer> value1 = (HashMap<Integer, Integer>) entry1.getValue();// сама строка
-                Iterator iterElement = value1.entrySet().iterator();// итератор элементов
-                int resValue = 0;
-                while (iterElement.hasNext()) {
-                    Map.Entry entryElement = (Map.Entry) iterElement.next();
-                    Integer keyElement = (Integer) entryElement.getKey();// ключ элемента
-                    Integer valueElement = (Integer) entryElement.getValue();//значение элемента
-                    resValue = resValue + this.matrix[i][keyElement] * valueElement;
-                }
-                if (resValue != 0) {
-                    resRow.put(key1, resValue);
-                }
-            }
-            if (resRow != null) {
-                res.map.put(i, resRow);
-            }
-        }
-        return res;
-    }*/
 
     public DMatrix MatrixSTrans() {
         int[][] mTr = new int[size][size];
